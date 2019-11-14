@@ -29,7 +29,9 @@ After cloning the repo, you need to install the required dependencies:
 Then run the NodeJS server (it listens by default to port 8000)
 
 ### During runtime
-Start by providing you Sunshine Conversation app key and secret in the "AppMaker configuration" section. Then click on InitAppMaker. You should have a confirmation message saying that the appMaker has been initialized.
+When loading the page, you are prompted to input the appId on which you want to do you test.
+
+Then, start by providing you Sunshine Conversation app key and secret in the "AppMaker configuration" section. Then click on InitAppMaker. You should have a confirmation message saying that the appMaker has been initialized.
 
 ![screen shot](https://media.smooch.io/apps/5cd1bb239d361e0010dc18ed/qs-8iCanDk1-iqZmoLMopoIE/Screen%20Shot%202019-11-14%20at%205.23.30%20PM.png)
 
