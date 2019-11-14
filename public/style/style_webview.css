@@ -1,0 +1,11 @@
+body {
+    background-color: white;
+    background-image: url("images/sunshine_hero.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    font-family: "Arial", serif;
+
+    color: #03363d;
+  }

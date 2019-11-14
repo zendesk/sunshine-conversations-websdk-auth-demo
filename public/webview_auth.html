@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style/style_webview.css">
+    </head>
+    <body>
+        <h2>User login:</h2>
+        <fieldset id=user_login>
+            <p>UserId: <input type="text" id="userid" value=""></p>
+            <p>Password: <input type="password" id="pwd" value=""></p>
+            <p><button id="login">Login</button></p>
+        </fieldset>
+    </body>
+
+    <script>
+        const loginButton = document.querySelector('#login'); 
+        const userIdInput = document.querySelector('#userid'); 
+        const pwdInput = document.querySelector('#pwd'); 
+        loginButton.onclick = function() {
+            if(userIdInput && pwdInput){
+                fetch('/user-login', {
+                    method: 'post',
+                    body: JSON.stringify({ userId: userIdInput.value, pwd: pwdInput.value }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                    .then(
+                        function(response) {
+                            if (response.status !== 200) {
+                                console.log('Looks like there was a problem. Status Code: ' + response.status);
+                                return;
+                            }
+                            // Examine the text in the response
+                            response.json().then(function(data) {
+                                var jwt = data.token;
+                                console.log('Logging as: userId '+ userIdInput.value + " ("+ jwt + ")");
+                                window.parent.parent.postMessage({userId : userIdInput.value , jwt : jwt}, "*");
+                                console.log("Message sent to parent window...");
+                            });
+                        }
+                    )
+                    .catch(function(err) {
+                        console.log('Fetch Error :-S', err);
+                    });
+            }
+        }
+    </script>
+</html>

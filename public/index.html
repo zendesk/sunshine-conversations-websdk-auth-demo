@@ -1,0 +1,166 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style/style.css">
+
+        <script>
+            const appID = prompt("Provide AppID : ", "5cd1bb239d361e0010dc18ed");
+            !function(e,n,t,r){
+                function o(){try{var e;if((e="string"==typeof this.response?JSON.parse(this.response):this.response).url){var t=n.getElementsByTagName("script")[0],r=n.createElement("script");r.async=!0,r.src=e.url,t.parentNode.insertBefore(r,t)}}catch(e){}}var s,p,a,i=[],c=[];e[t]={init:function(){s=arguments;var e={then:function(n){return c.push({type:"t",next:n}),e},catch:function(n){return c.push({type:"c",next:n}),e}};return e},on:function(){i.push(arguments)},render:function(){p=arguments},destroy:function(){a=arguments}},e.__onWebMessengerHostReady__=function(n){if(delete e.__onWebMessengerHostReady__,e[t]=n,s)for(var r=n.init.apply(n,s),o=0;o<c.length;o++){var u=c[o];r="t"===u.type?r.then(u.next):r.catch(u.next)}p&&n.render.apply(n,p),a&&n.destroy.apply(n,a);for(o=0;o<i.length;o++)n.on.apply(n,i[o])};var u=new XMLHttpRequest;u.addEventListener("load",o),u.open("GET","https://"+r+".webloader.smooch.io/",!0),u.responseType="json",u.send()
+            }(window,document,"Smooch",appID);
+        </script>
+
+        <script>
+            (function(d, s, id) {
+                var js,
+                    fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {
+                    return;
+                }
+                js = d.createElement(s);
+                js.id = id;
+                js.src = 'https://cdn.smooch.io/webview-sdk.min.js';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'WebviewSdkScript'));
+        </script>
+
+    </head>
+    <body>
+        <h1>Hello world</h1>
+        <button id=clear>New user</button>
+
+        <h2>AppMaker configuration:</h2>
+        <fieldset id=appmakerconfig>
+            <p>Key: <input type="text" id="key" value=""></p>
+            <p>Secret: <input type="text" id="secret" value=""></p>
+            <p><button id="init">Init AppMaker</button><strong>Beware! Someone else might be using this portal and you could be interfering. The server doens't manage sessions.. yet</strong></p>
+        </fieldset>
+
+        <h2>User login:</h2>
+        <p><button id="webview">Push a login request</button>
+        <fieldset id=user_login>
+            <p>UserId: <input type="text" id="userid" value=""></p>
+            <p>Password: <input type="text" id="pwd" value=""></p>
+            <p><button id="login">Login</button></p>
+        </fieldset>
+    </body>
+
+    <script>
+        function receiveMessage(event){
+            console.log("Auth info received...");
+            Smooch.login(event.data.userId, event.data.jwt).then(
+                function() {
+                    // Your code after login is complete
+                    console.log("Login successful!")
+                },
+                function(err) {
+                    // Something went wrong during login. Your JWT might be invalid
+                    console.log("Login failed...")
+                }
+            );
+        }
+        window.addEventListener("message", receiveMessage, false);
+
+        function smoochInit(){
+            Smooch.init({ appId: appID})
+                .then(
+                    function() {
+                        document.getElementById("clear").disabled = false;
+                        Smooch.startConversation();
+                    },
+                    function(err) {
+                        document.getElementById("clear").disabled = true;
+                        document.getElementById("webview").disabled = true;
+                    }
+                );
+        }
+
+        document.getElementById("clear").disabled = true;
+        document.getElementById("webview").disabled = true;
+        smoochInit();
+        
+        const clearButton = document.querySelector('#clear'); 
+        clearButton.onclick = function() {
+            localStorage.clear();
+            Smooch.destroy();
+            smoochInit();
+        }
+
+        const initButton = document.querySelector('#init'); 
+        const keyInput = document.querySelector('#key'); 
+        const secretInput = document.querySelector('#secret'); 
+        initButton.onclick = function() {
+            if(keyInput && secretInput){
+                fetch('/init-appmaker', {
+                    method: 'post',
+                    body: JSON.stringify({ key: keyInput.value, secret: secretInput.value, url: window.location.href }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                    .then(
+                        function(response) {
+                            if (response.status !== 200) {
+                                console.log('Looks like there was a problem. Status Code: ' + response.status);
+                                return;
+                            }
+                            // Confirm init
+                            alert("AppMaker initialized")
+                            document.getElementById("webview").disabled = false;
+                        }
+                    )
+                    .catch(function(err) {
+                        console.log('Fetch Error :-S', err);
+                        document.getElementById("webview").disabled = true;
+                    });
+            }
+        }
+
+        const loginButton = document.querySelector('#login'); 
+        const userIdInput = document.querySelector('#userid'); 
+        const pwdInput = document.querySelector('#pwd'); 
+        loginButton.onclick = function() {
+            if(userIdInput && pwdInput){
+                fetch('/user-login', {
+                    method: 'post',
+                    body: JSON.stringify({ userId: userIdInput.value, pwd: pwdInput.value }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                    .then(
+                        function(response) {
+                            if (response.status !== 200) {
+                                console.log('Looks like there was a problem. Status Code: ' + response.status);
+                                return;
+                            }
+                            // Examine the text in the response
+                            response.json().then(function(data) {
+                                var jwt = data.token;
+                                console.log('Logging as: userId '+ userIdInput.value + " ("+ jwt + ")");
+                                Smooch.login(userIdInput.value, jwt).then(
+                                    function() {
+                                        // Your code after login is complete
+                                        console.log("Login successful!")
+                                    },
+                                    function(err) {
+                                        // Something went wrong during login. Your JWT might be invalid
+                                        console.log("Login failed...")
+                                    }
+                                );
+                            });
+                        }
+                    )
+                    .catch(function(err) {
+                        console.log('Fetch Error :-S', err);
+                    });
+            }
+        }
+
+        const webviewButton = document.querySelector('#webview'); 
+        webviewButton.onclick = function() {
+            fetch('/send-auth-webview', {
+                    method: 'post',
+                    body: JSON.stringify({ appUserId: Smooch.getUser()._id }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+        }
+
+    </script>
+</html>
