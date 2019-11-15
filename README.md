@@ -2,12 +2,9 @@
 User authentication on Web Messenger
 
 ## What does it do?
-This project is a demo on how to implement user authentication with Sunshine Conversation:
+This project is a demo on how to implement user authentication with Sunshine Conversation and the WebMessenger:
 1. Using a login form directly on the webpage
 1. By sending a webview to the user for authentication 
-
-The frontend is a webpage with the WebMessenger enabled. 
-You have the option to reset the WebMessenger and therefore create a new anonymous user using the "New User" button
 
 
 ## How does it work?
@@ -32,6 +29,16 @@ After cloning the repo, you need to install the required dependencies:
 Then run the NodeJS server (it listens by default to port 8000)
 
 ### During runtime
-Start by providing you Sunshine Conversation app key and secret in the "AppMaker configuration" section. Then click on InitAppMaker. You should have a confirmation message saying that the appMaker has been initialized.
+When loading the page, you are prompted to input the appId on which you want to do you test.
+
+Then, start by providing you Sunshine Conversation app key and secret in the "AppMaker configuration" section. Then click on InitAppMaker. You should have a confirmation message saying that the appMaker has been initialized.
+
+![screen shot](https://media.smooch.io/apps/5cd1bb239d361e0010dc18ed/qs-8iCanDk1-iqZmoLMopoIE/Screen%20Shot%202019-11-14%20at%205.23.30%20PM.png)
 
 Then you can either click the "Push a login request" to send the authentication webview to the current user. Or you can directly login on the "User login" form.
+
+![screen shot](https://media.smooch.io/apps/5cd1bb239d361e0010dc18ed/E5f8PAG9gpwNYlPQTxAmxO6P/Screen%20Shot%202019-11-14%20at%205.23.35%20PM.png)
+
+Whenever you want to run a new test, you have the option to reset the WebMessenger and therefore create a new anonymous user using the "New User" button.
+
+![screen shot](https://media.smooch.io/apps/5cd1bb239d361e0010dc18ed/_lEbdWTveQivTwHDeVTQzMfe/Screen%20Shot%202019-11-14%20at%205.23.21%20PM.png)
