@@ -132,7 +132,7 @@
                             }
                             // Examine the text in the response
                             response.json().then(function(data) {
-                                var jwt = data.token;
+                                let jwt = data.token;
                                 console.log('Logging as: userId '+ userIdInput.value + " ("+ jwt + ")");
                                 Smooch.login(userIdInput.value, jwt).then(
                                     function() {

@@ -49,13 +49,13 @@ function initAppmaker(req, res) {
 async function userLogin(req, res) {
     console.log('User login:\n', JSON.stringify(req.body, null, 4));
 
-    var userId = req.body.userId;
-    var pwd = req.body.pwd;
+    let userId = req.body.userId;
+    let pwd = req.body.pwd;
 
     console.log('User identified: ' + userId + "/" + pwd);
 
     //sign JWT
-    var jwt = signJwt(userId);
+    let jwt = signJwt(userId);
     let reply = {token : jwt};
     console.log('Reply:\n', JSON.stringify(reply, null, 4));
     res.send(reply);
@@ -84,7 +84,7 @@ function signJwt(userId) {
 async function sendAuthWebview(req, res) {
     console.log('Sending webview:\n', JSON.stringify(req.body, null, 4));
 
-    var appUserId = req.body.appUserId;
+    let appUserId = req.body.appUserId;
     console.log('Recipient:\n', appUserId);
     console.log('URL:\n', url+'/webview_auth');
 
