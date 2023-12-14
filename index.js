@@ -50,12 +50,13 @@ async function userLogin(req, res) {
     console.log('User login:\n', JSON.stringify(req.body, null, 4));
 
     let userId = req.body.userId;
-    let pwd = req.body.pwd;
+    let email = req.body.email;
+    let verified = req.body.verified
 
-    console.log('User identified: ' + userId + "/" + pwd);
+    console.log('User identified: ' + userId);
 
     //sign JWT
-    let jwt = signJwt(userId);
+    let jwt = signJwt(userId, email, verified);
     let reply = {token : jwt};
     console.log('Reply:\n', JSON.stringify(reply, null, 4));
     res.send(reply);
@@ -63,12 +64,16 @@ async function userLogin(req, res) {
 }
 
 // Signing a JWT using user ID, key and secret
-function signJwt(userId) {
+function signJwt(userId, email, verified) {
+    let payload = {
+        scope: 'user',
+        userId: userId
+    }
+    if (email) payload['email'] = email;
+    if (verified) payload['email_verified'] = verified == 'true';
+    console.log(payload);
     return JWT.sign(
-        {
-            scope: 'appUser',
-            userId: userId
-        },
+        payload,
         secret,
         {
             header: {
