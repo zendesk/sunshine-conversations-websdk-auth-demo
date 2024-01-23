@@ -25,20 +25,42 @@ The login process works that way:
 
 ### Installation
 After cloning the repo, you need to install the required dependencies:
-`npm install`
+`npm install`<br>
 Then run the NodeJS server (it listens by default to port 8000)
+
+### Run it with your account
+ 1. Copy index.html file under file under '/public' directory and replace "index" to your subdomain
+
+ 2. Change the values for the following variable at the respective lines:
+     - L7 : Webwidget `integration_id` can be found in debuggler or the logs
+     - L32, L33 : SunCo API key/secret can be generated on the Admin Center > Account > End user authentication > Messaging tab
+     - L74 : Uncomment `configBaseUrl` parameter and add your subdomain URL eg. `configBaseUrl`: `https://<subdomain>.zendesk-staging.com/sc/sdk`
+     - L76 : Set `canUserSeeConversationList` to true for multi-convo capability
+
+ 3. Run 'node index.js'
+
+ 4. Open http://localhost:8000/<subdomain>.html in the browser
 
 ### During runtime
 When loading the page, you are prompted to input the appId on which you want to do you test.
 
-Then, start by providing you Sunshine Conversation app key and secret in the "AppMaker configuration" section. Then click on InitAppMaker. You should have a confirmation message saying that the appMaker has been initialized.
+Then, start by optionally modifying your Sunshine Conversation app key and secret in the "AppMaker configuration" section. Then click on InitAppMaker. You should have a confirmation message saying that the appMaker has been initialized.
 
-![screen shot](https://media.smooch.io/apps/5cd1bb239d361e0010dc18ed/qs-8iCanDk1-iqZmoLMopoIE/Screen%20Shot%202019-11-14%20at%205.23.30%20PM.png)
+<img width="354" alt="image" src="https://github.com/zendesk/sunshine-conversations-websdk-auth-demo/assets/97223593/81c15b17-2471-4245-90e3-e95e4b6156df">
 
-Then you can either click the "Push a login request" to send the authentication webview to the current user. Or you can directly login on the "User login" form.
+The widget will be loaded and initialized and you may start a conversation right away.
 
-![screen shot](https://media.smooch.io/apps/5cd1bb239d361e0010dc18ed/E5f8PAG9gpwNYlPQTxAmxO6P/Screen%20Shot%202019-11-14%20at%205.23.35%20PM.png)
+<img width="186" alt="image" src="https://github.com/zendesk/sunshine-conversations-websdk-auth-demo/assets/97223593/fce609d2-a86e-489e-9f35-45a50082895b">
+
+Use the login form to simulate a login on the customer's website, providing the following details:<br>
+1. UserId: (External ID)
+2. Email: (Email)
+3. Verified: (whether or not email is verified by the customer)
+<br>Note that in the real use case, the end user simply logs in using their credentials and the above details are sent to Zendesk by the customer on the end user's behalf.
+
+<img width="355" alt="image" src="https://github.com/zendesk/sunshine-conversations-websdk-auth-demo/assets/97223593/b356a465-4332-4a74-95e9-3debde38d01c">
 
 Whenever you want to run a new test, you have the option to reset the WebMessenger and therefore create a new anonymous user using the "New User" button.
 
-![screen shot](https://media.smooch.io/apps/5cd1bb239d361e0010dc18ed/_lEbdWTveQivTwHDeVTQzMfe/Screen%20Shot%202019-11-14%20at%205.23.21%20PM.png)
+<img width="246" alt="image" src="https://github.com/zendesk/sunshine-conversations-websdk-auth-demo/assets/97223593/f3c1f0d6-6243-48ea-96bb-e0370ca8b6d5">
+
